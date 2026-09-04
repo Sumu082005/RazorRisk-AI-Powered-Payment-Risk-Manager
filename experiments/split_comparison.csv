@@ -1,0 +1,5 @@
+Split_Strategy,Train_Rows,Train_Fraud,Train_Fraud_Pct,Val_Rows,Val_Fraud,Val_Fraud_Pct,Test_Rows,Test_Fraud,Test_Fraud_Pct,Duplicate_Overlap_Count,Leakage_Free,Defensibility
+A. Stratified Random (Standard),182276,315,0.1728,45569,79,0.1734,56962,98,0.172,252,No (duplicate overlap across train/test),Standard benchmark baseline; risks mild leakage due to duplicate records
+B. Pure Chronological (Time-Based),182276,365,0.2002,45569,52,0.1141,56962,75,0.1317,0,"Partial (respects time, but short 48h span causes class shift)","Causally realistic for time series, but 48h duration produces severe test non-stationarity"
+C. Deduplicated Stratified Split (Primary Candidate),181584,302,0.1663,45396,76,0.1674,56746,95,0.1674,0,"Yes (Zero duplicate overlap, exact stratification)",Mathematically purest & most defensible against duplicate contamination
+D. Group-Aware Stratified Split (Retains Duplicates),182287,312,0.1712,45572,84,0.1843,56948,96,0.1686,0,Yes (Zero duplicate overlap across splits),Preserves original sample volume while guaranteeing zero group crossover

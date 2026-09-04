@@ -1,0 +1,6 @@
+Test_Case,Input_Condition,Expected_Behavior,Observed_Output,Status
+1. Idempotency / Repeated Scoring,100 consecutive scoring calls on exact same transaction,Identical probability output for all calls,Max delta = 0.0000000000 (deterministic),PASSED
+2. Extreme High Amount ($100000.00),Amount set to $100000 (3.9x dataset maximum),Graceful score generation without numeric overflow / NaN,Risk Score = 0.0005,PASSED
+3. Zero Amount Authorization ($0.00),Amount set to $0.00 (auth check),Valid score computation without division-by-zero errors,Risk Score = 0.0017,PASSED
+4. Threshold Boundary Stability,Scores at threshold +/- 1e-5 (0.33999 / 0.34001),Strict deterministic bifurcation (>= threshold is positive),"Pred(+): 1, Pred(-): 0",PASSED
+5. Out-of-Distribution Extreme Anomaly,V14 and V17 perturbed to extreme values (-25.0 / -30.0),Risk score spikes towards 1.0 without crash,Elevated Risk Score = 0.5407,WARNING (Low sensitivity)

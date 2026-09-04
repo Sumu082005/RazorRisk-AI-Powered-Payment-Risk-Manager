@@ -1,0 +1,4 @@
+Method,Brier_Score,Log_Loss,ECE_10Bins,PR_AUC
+Uncalibrated (Raw Random Forest),0.000332,0.002388,0.000314,0.8742
+Platt Scaling (Logistic Sigmoid),0.000401,0.002808,0.000502,0.8742
+Isotonic Regression,0.000277,0.001984,0.0,0.8721

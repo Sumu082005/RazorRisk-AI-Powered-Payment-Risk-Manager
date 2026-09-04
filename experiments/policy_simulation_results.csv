@@ -1,0 +1,4 @@
+Risk_Posture,Review_Threshold,Block_Threshold,Pct_Approved,Pct_Reviewed,Pct_Blocked,Fraud_Intercepted_Pct,Fraud_Dollars_Intercepted_Pct,Fraud_Blocked_Count,Fraud_Reviewed_Count,Fraud_Missed_Count,Legit_Transactions_Blocked,Legit_Transactions_Reviewed,Total_Legitimate_Impacted,Total_Expected_Modeled_Cost
+FRAUD_PREVENTION,0.08,0.25,99.8039,0.0859,0.1101,86.84,77.31,50,16,10,0,23,23,4609.22
+BALANCED,0.12,0.34,99.8172,0.0727,0.1101,86.84,77.31,50,16,10,0,17,17,5756.64
+CUSTOMER_EXPERIENCE,0.18,0.45,99.8304,0.0595,0.1101,86.84,77.31,50,16,10,0,11,11,6956.92

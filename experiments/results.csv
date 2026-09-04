@@ -1,0 +1,6 @@
+Split,Operating_Mode,Threshold,PR_AUC,ROC_AUC,Precision,Recall,F1,TP,FP,TN,FN,FPR,FNR,Rec_at_Prec80,Rec_at_Prec90,Prec_at_Rec80,Brier_Score
+Primary Test (Deduplicated Stratified),Default (0.50),0.5,0.786635,0.959495,0.958904,0.736842,0.833333,70,3,56648,25,5.3e-05,0.263158,0.778947,0.768421,0.301587,0.000487
+Primary Test (Deduplicated Stratified),High-Recall (Scenario A),0.37,0.786635,0.959495,0.946667,0.747368,0.835294,71,4,56647,24,7.1e-05,0.252632,0.778947,0.768421,0.301587,0.000487
+Primary Test (Deduplicated Stratified),Balanced (Scenario B),0.34,0.786635,0.959495,0.934211,0.747368,0.830409,71,5,56646,24,8.8e-05,0.252632,0.778947,0.768421,0.301587,0.000487
+Primary Test (Deduplicated Stratified),High-Precision (Scenario C),0.22,0.786635,0.959495,0.901235,0.768421,0.829545,73,8,56643,22,0.000141,0.231579,0.778947,0.768421,0.301587,0.000487
+Secondary Robustness Test (Pure Chronological),Default (0.50),0.5,0.794404,0.987012,0.961538,0.666667,0.787402,50,2,56885,25,3.5e-05,0.333333,0.76,0.733333,0.441176,0.000439

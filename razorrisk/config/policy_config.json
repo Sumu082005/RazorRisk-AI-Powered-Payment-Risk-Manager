@@ -1,0 +1,79 @@
+{
+  "engine_metadata": {
+    "engine_name": "RazorRisk Deterministic Decision Engine",
+    "engine_version": "1.0.0",
+    "policy_version": "2026.08-v1",
+    "last_updated": "2026-08-26T22:20:00Z",
+    "author": "RazorRisk Engineering Team (AI Risk Manager Track)"
+  },
+  "risk_tiers": {
+    "LOW": {
+      "min_probability": 0.0,
+      "max_probability": 0.10,
+      "default_action": "APPROVE",
+      "description": "Minimal risk of fraudulent activity"
+    },
+    "MEDIUM": {
+      "min_probability": 0.10,
+      "max_probability": 0.34,
+      "default_action": "REVIEW",
+      "description": "Elevated ambiguity or anomaly requiring verification"
+    },
+    "HIGH": {
+      "min_probability": 0.34,
+      "max_probability": 0.80,
+      "default_action": "BLOCK",
+      "description": "High probability of fraudulent transaction"
+    },
+    "CRITICAL": {
+      "min_probability": 0.80,
+      "max_probability": 1.0,
+      "default_action": "BLOCK",
+      "description": "Severe fraud probability requiring immediate block and audit logging"
+    }
+  },
+  "confidence_tiers": {
+    "boundary_ambiguity_threshold": 0.05,
+    "calibration_divergence_threshold": 0.15,
+    "high_confidence_boundary_distance": 0.12
+  },
+  "cost_profiles": {
+    "FRAUD_PREVENTION": {
+      "profile_name": "FRAUD_PREVENTION",
+      "description": "Prioritizes fraud prevention. Low tolerance for chargebacks, aggressive interception.",
+      "operational_threshold_review": 0.08,
+      "operational_threshold_block": 0.25,
+      "assumed_review_cost": 10.0,
+      "assumed_chargeback_fee": 15.0,
+      "assumed_false_positive_friction_cost": 25.0,
+      "assumed_review_accuracy": 0.95
+    },
+    "BALANCED": {
+      "profile_name": "BALANCED",
+      "description": "Standard balanced risk policy. Optimizes total expected cost and F1 score.",
+      "operational_threshold_review": 0.12,
+      "operational_threshold_block": 0.34,
+      "assumed_review_cost": 35.0,
+      "assumed_chargeback_fee": 15.0,
+      "assumed_false_positive_friction_cost": 50.0,
+      "assumed_review_accuracy": 0.92
+    },
+    "CUSTOMER_EXPERIENCE": {
+      "profile_name": "CUSTOMER_EXPERIENCE",
+      "description": "Prioritizes user conversion and zero checkout friction. Strict blocking criteria.",
+      "operational_threshold_review": 0.18,
+      "operational_threshold_block": 0.45,
+      "assumed_review_cost": 75.0,
+      "assumed_chargeback_fee": 15.0,
+      "assumed_false_positive_friction_cost": 100.0,
+      "assumed_review_accuracy": 0.90
+    }
+  },
+  "safety_rules": {
+    "fail_closed_action_invalid_input": "REVIEW",
+    "fail_closed_action_system_error": "REVIEW",
+    "critical_amount_threshold": 10000.0,
+    "zero_amount_action": "REVIEW",
+    "low_confidence_override_action": "REVIEW"
+  }
+}

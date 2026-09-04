@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RazorRisk — Razorpay Test Mode Checkout (Temporary)</title>
+  <!-- Razorpay Checkout.js Standard Integration -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --text: #f9fafb;
+      --text-muted: #9ca3af;
+      --warning-bg: rgba(245, 158, 11, 0.12);
+      --warning-border: #f59e0b;
+      --warning-text: #fbbf24;
+      --success-bg: rgba(16, 185, 129, 0.12);
+      --success-border: #10b981;
+      --success-text: #34d399;
+      --error-bg: rgba(239, 68, 68, 0.12);
+      --error-border: #ef4444;
+      --error-text: #f87171;
+      --input-bg: #1e293b;
+      --input-border: #334155;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 520px;
+      width: 100%;
+    }
+
+    /* Temporary Banner */
+    .banner {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      color: var(--warning-text);
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .banner strong {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .brand-tag {
+      background: rgba(37, 99, 235, 0.2);
+      color: #60a5fa;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Amount Input Section */
+    .amount-input-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .currency-symbol {
+      position: absolute;
+      left: 14px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #60a5fa;
+      pointer-events: none;
+    }
+
+    .amount-input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 12px 14px 12px 34px;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .amount-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+
+    .quick-amounts {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .chip-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .chip-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: #3b82f6;
+    }
+
+    .input-error {
+      font-size: 12px;
+      color: var(--error-text);
+      display: none;
+    }
+
+    /* Order Summary */
+    .order-summary {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .summary-row:last-child {
+      margin-bottom: 0;
+      padding-top: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-weight: 600;
+    }
+
+    .summary-label {
+      color: var(--text-muted);
+    }
+
+    .summary-value {
+      color: var(--text);
+    }
+
+    .amount-highlight {
+      font-size: 20px;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+
+    /* Official Test Guide Box */
+    .tip-box {
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid #3b82f6;
+      padding: 12px 14px;
+      border-radius: 0 6px 6px 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #bfdbfe;
+    }
+
+    .tip-box strong {
+      color: #93c5fd;
+    }
+
+    .test-credentials {
+      margin-top: 6px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 4px 10px;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .test-credentials span:nth-child(odd) {
+      color: var(--text-muted);
+    }
+
+    .test-credentials span:nth-child(even) {
+      color: #6ee7b7;
+    }
+
+    /* Configuration Metadata */
+    .config-info {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 6px;
+    }
+
+    .config-row {
+      display: flex;
+      justify-content: space-between;
+      overflow-wrap: anywhere;
+    }
+
+    .config-row code {
+      color: #93c5fd;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+      width: 100%;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--primary-hover);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.99);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Result Panels */
+    .result-box {
+      display: none;
+      border-radius: 8px;
+      padding: 18px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .result-box.success {
+      display: block;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      color: var(--text);
+    }
+
+    .result-box.error {
+      display: block;
+      background: var(--error-bg);
+      border: 1px solid var(--error-border);
+      color: var(--error-text);
+    }
+
+    .result-header {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .result-header.success {
+      color: var(--success-text);
+    }
+
+    .result-field {
+      margin-bottom: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .result-label {
+      color: var(--text-muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .result-val {
+      font-family: monospace;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 6px 8px;
+      border-radius: 4px;
+      color: #6ee7b7;
+      font-size: 12px;
+      word-break: break-all;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 16px;
+      font-size: 13px;
+    }
+
+    .nav-links a {
+      color: #60a5fa;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Temporary Page Notice -->
+    <div class="banner">
+      <span style="font-size: 18px;">⚠️</span>
+      <div>
+        <strong>Temporary Test Page &bull; Test Mode Only</strong>
+        This sandbox is strictly for testing Razorpay Standard Checkout in RazorRisk. Never use key secrets or live credentials in frontend code.
+      </div>
+    </div>
+
+    <!-- Main Checkout Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="brand">
+          <span class="title">RazorRisk Sandbox</span>
+          <span class="brand-tag">Test Mode</span>
+        </div>
+        <div class="subtitle">Razorpay Standard Checkout & Live Risk Webhook Verification</div>
+      </div>
+
+      <div class="card-body">
+        <!-- Amount Input Field -->
+        <div class="amount-input-section">
+          <label class="input-label" for="amountInput">
+            <span>Payment Amount (INR)</span>
+            <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">Min: ₹1 &bull; Max: ₹1,00,000</span>
+          </label>
+          <div class="input-wrapper">
+            <span class="currency-symbol">₹</span>
+            <input 
+              type="number" 
+              id="amountInput" 
+              class="amount-input" 
+              value="50" 
+              min="1" 
+              max="100000" 
+              step="any"
+              placeholder="Enter amount (e.g. 50)"
+            />
+          </div>
+          <div class="quick-amounts">
+            <button type="button" class="chip-btn" onclick="setAmount(1)">₹1</button>
+            <button type="button" class="chip-btn" onclick="setAmount(50)">₹50</button>
+            <button type="button" class="chip-btn" onclick="setAmount(100)">₹100</button>
+            <button type="button" class="chip-btn" onclick="setAmount(500)">₹500</button>
+            <button type="button" class="chip-btn" onclick="setAmount(1250)">₹1,250</button>
+          </div>
+          <div id="inputError" class="input-error"></div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="order-summary">
+          <div class="summary-row">
+            <span class="summary-label">Item</span>
+            <span class="summary-value">Payment Risk Assessment Pass</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Mode</span>
+            <span class="summary-value" style="color: #f59e0b;">Razorpay Test Mode</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Target Endpoint</span>
+            <span class="summary-value"><code>POST /api/v1/razorpay/orders</code></span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Order Total</span>
+            <span id="summaryAmount" class="summary-value amount-highlight">₹50.00</span>
+          </div>
+        </div>
+
+        <!-- Razorpay Test Mode Sandbox Tip Box -->
+        <div class="tip-box">
+          <strong>Razorpay Test Mode Sandbox:</strong>
+          <p style="margin-top: 4px; color: #cbd5e1; font-size: 12px; line-height: 1.5;">
+            Simulate test payments using Razorpay Standard Checkout in Test Mode (e.g. Netbanking / Test Wallets). Successful test payments deliver webhook events to RazorRisk.
+          </p>
+        </div>
+
+
+
+        <!-- Configuration Metadata -->
+        <div class="config-info">
+          <div class="config-row">
+            <span>API Server:</span>
+            <code id="apiBaseUrlDisplay">-</code>
+          </div>
+          <div class="config-row">
+            <span>Razorpay Key ID (Public):</span>
+            <code id="keyIdDisplay">Fetched on order creation</code>
+          </div>
+          <div class="config-row">
+            <span>Key Secret Status:</span>
+            <span style="color: #10b981; font-weight: 600;">Protected on Server (Never Exposed)</span>
+          </div>
+        </div>
+
+        <!-- Checkout Action Button -->
+        <button id="payButton" class="btn" onclick="startTestCheckout()">
+          <span class="spinner" id="spinner"></span>
+          <span id="buttonText">Pay ₹50.00 with Razorpay</span>
+        </button>
+
+        <!-- Result Box (Hidden by default) -->
+        <div id="resultBox" class="result-box">
+          <div id="resultHeader" class="result-header"></div>
+          <div id="resultContent"></div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="nav-links">
+          <a href="/dashboard#overview">&larr; Back to RazorRisk Dashboard</a>
+          <a href="/dashboard#transactions">View Transactions</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      RazorRisk &bull; Razorpay AI Buildathon 2026 &bull; Test Mode Environment
+    </div>
+  </div>
+
+  <script>
+    /**
+     * Frontend Configuration
+     * Uses current host if served via backend (http://127.0.0.1:8000),
+     * or defaults to window.location.origin.
+     */
+    const FRONTEND_CONFIG = {
+      apiBaseUrl: window.location.origin.startsWith("http") ? window.location.origin : "http://127.0.0.1:8000",
+      defaultKeyId: window.RAZORPAY_KEY_ID || ""
+    };
+
+    document.getElementById("apiBaseUrlDisplay").textContent = FRONTEND_CONFIG.apiBaseUrl;
+
+    const amountInput = document.getElementById("amountInput");
+    const summaryAmount = document.getElementById("summaryAmount");
+    const inputError = document.getElementById("inputError");
+    const payBtn = document.getElementById("payButton");
+    const buttonText = document.getElementById("buttonText");
+    const spinner = document.getElementById("spinner");
+    const resultBox = document.getElementById("resultBox");
+    const resultHeader = document.getElementById("resultHeader");
+    const resultContent = document.getElementById("resultContent");
+    const keyIdDisplay = document.getElementById("keyIdDisplay");
+
+    function setAmount(val) {
+      amountInput.value = val;
+      validateAndUpdateAmount();
+    }
+
+    function getParsedAmount() {
+      const raw = amountInput.value.trim();
+      if (!raw) return { valid: false, error: "Please enter a payment amount." };
+      
+      const num = Number(raw);
+      if (isNaN(num)) return { valid: false, error: "Amount must be a valid number." };
+      if (num < 1) return { valid: false, error: "Minimum payment amount is ₹1.00." };
+      if (num > 100000) return { valid: false, error: "Maximum demo payment amount is ₹1,00,000.00." };
+
+      return { valid: true, amount: num, paise: Math.round(num * 100) };
+    }
+
+    function validateAndUpdateAmount() {
+      const parsed = getParsedAmount();
+      if (!parsed.valid) {
+        inputError.textContent = parsed.error;
+        inputError.style.display = "block";
+        payBtn.disabled = true;
+        summaryAmount.textContent = "—";
+        buttonText.textContent = "Enter Valid Amount";
+        return null;
+      } else {
+        inputError.style.display = "none";
+        payBtn.disabled = false;
+        const formatted = parsed.amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        summaryAmount.textContent = `₹${formatted}`;
+        buttonText.textContent = `Pay ₹${formatted} with Razorpay`;
+        return parsed;
+      }
+    }
+
+    amountInput.addEventListener("input", validateAndUpdateAmount);
+
+    function setLoading(isLoading, text) {
+      if (isLoading) {
+        payBtn.disabled = true;
+        spinner.style.display = "inline-block";
+        buttonText.textContent = text || "Processing...";
+      } else {
+        spinner.style.display = "none";
+        validateAndUpdateAmount();
+      }
+    }
+
+    function showResult(isSuccess, title, fields) {
+      resultBox.className = "result-box " + (isSuccess ? "success" : "error");
+      resultHeader.className = "result-header " + (isSuccess ? "success" : "");
+      resultHeader.innerHTML = (isSuccess ? "✓ " : "✕ ") + title;
+      
+      let html = "";
+      if (typeof fields === "string") {
+        html = `<div>${fields}</div>`;
+      } else {
+        for (const [label, val] of Object.entries(fields)) {
+          html += `
+            <div class="result-field">
+              <span class="result-label">${label}</span>
+              <span class="result-val">${val}</span>
+            </div>
+          `;
+        }
+      }
+      resultContent.innerHTML = html;
+      resultBox.style.display = "block";
+    }
+
+    async function startTestCheckout() {
+      const parsed = validateAndUpdateAmount();
+      if (!parsed) return;
+
+      resultBox.style.display = "none";
+      setLoading(true, `Creating ₹${parsed.amount.toFixed(2)} Order...`);
+
+      try {
+        // Step 1: Call POST /api/v1/razorpay/orders with user-entered amount in paise
+        const orderPayload = {
+          amount: parsed.paise,
+          currency: "INR",
+          receipt: "rcpt_test_" + Date.now().toString(36),
+          notes: {
+            mode: "test_mode",
+            flow: "standard_checkout",
+            user_amount_inr: parsed.amount.toString()
+          }
+        };
+
+        const response = await fetch(`${FRONTEND_CONFIG.apiBaseUrl}/api/v1/razorpay/orders`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(orderPayload)
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ detail: response.statusText }));
+          throw new Error(errorData.detail || `Server returned HTTP ${response.status}`);
+        }
+
+        const orderData = await response.json();
+        
+        // Safely show public Key ID from response/config
+        const activeKeyId = orderData.key_id || FRONTEND_CONFIG.defaultKeyId;
+        keyIdDisplay.textContent = activeKeyId || "Not provided";
+
+        setLoading(true, "Opening Razorpay Standard Checkout...");
+
+        // Step 2: Configure Razorpay Checkout.js options
+        const options = {
+          key: activeKeyId,
+          amount: orderData.amount,
+          currency: orderData.currency,
+          name: "RazorRisk Test Sandbox",
+          description: `Test Transaction ₹${parsed.amount.toFixed(2)}`,
+          order_id: orderData.order_id,
+          prefill: {
+            name: "Test Merchant",
+            email: "test.merchant@razorrisk.dev",
+            contact: "9999999999"
+          },
+          notes: {
+            mode: "test_mode",
+            flow: "standard_checkout"
+          },
+          theme: {
+            color: "#2563eb"
+          },
+          handler: function (paymentResponse) {
+            // Step 3: Display Razorpay payment ID and order ID upon success
+            setLoading(false);
+            showResult(true, "Payment Successful", {
+              "Amount Paid": `₹${parsed.amount.toFixed(2)} (${orderData.amount} paise)`,
+              "Razorpay Payment ID": paymentResponse.razorpay_payment_id,
+              "Razorpay Order ID": paymentResponse.razorpay_order_id,
+              "Razorpay Signature": paymentResponse.razorpay_signature || "Verified",
+              "Next Step": "Webhooks will automatically deliver to /webhooks/razorpay and appear in your RazorRisk dashboard."
+            });
+          },
+          modal: {
+            ondismiss: function () {
+              setLoading(false);
+              showResult(false, "Checkout Dismissed", "The payment modal was closed before completion. You can retry at any time.");
+            }
+          }
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.on("payment.failed", function (failResponse) {
+          setLoading(false);
+          const err = failResponse.error || {};
+          showResult(false, "Payment Failed", {
+            "Error Code": err.code || "PAYMENT_FAILED",
+            "Description": err.description || "Payment transaction was rejected or failed in test mode.",
+            "Payment ID": err.metadata ? err.metadata.payment_id : "N/A",
+            "Order ID": err.metadata ? err.metadata.order_id : orderData.order_id
+          });
+        });
+
+        rzp.open();
+
+      } catch (err) {
+        setLoading(false);
+        showResult(false, "Order Creation Failed", {
+          "Error": err.message || "Failed to communicate with backend."
+        });
+      }
+    }
+
+    // Initialize display on load
+    validateAndUpdateAmount();
+  </script>
+</body>
+</html>

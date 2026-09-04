@@ -1,0 +1,4 @@
+Scenario,FP_Cost_Param,CB_Fee_Param,Optimal_Threshold,Total_Cost,FN_Loss,FP_Loss,Fraud_Captured_Count,Fraud_Missed_Count,Fraud_Capture_Rate_Pct,Fraud_Dollars_Captured_Pct,False_Positives_Impacted
+Scenario A: Fraud Loss Heavily Prioritized,10.0,15.0,0.34,1854.93,1814.93,40.0,66,10,86.84,77.31,4
+Scenario B: Balanced Risk & Friction Cost,35.0,15.0,0.34,1954.93,1814.93,140.0,66,10,86.84,77.31,4
+Scenario C: Customer Experience Heavily Prioritized,100.0,15.0,0.34,2214.93,1814.93,400.0,66,10,86.84,77.31,4

@@ -1,0 +1,97 @@
+{
+  "evaluation_dataset": "IEEE-CIS Fraud Detection (Held-Out Evaluation Split)",
+  "evaluation_type": "OFFLINE_MODEL_RISK_COVERAGE",
+  "disclaimer": "Metrics and examples generated strictly from offline held-out evaluation data. These are NOT live Razorpay transactions.",
+  "total_evaluated_records": 12000,
+  "tier_distribution": {
+    "LOW": 11624,
+    "MEDIUM": 299,
+    "HIGH": 38,
+    "CRITICAL": 39
+  },
+  "min_score": 0.0004,
+  "max_score": 1.0,
+  "avg_score": 0.0255,
+  "tier_examples": {
+    "LOW": {
+      "eval_id": "EVAL-IEEE-00000",
+      "fraud_probability": 0.0102,
+      "calibrated_probability": 0.0102,
+      "uncertainty": 0.0101,
+      "risk_tier": "LOW",
+      "recommended_action": "APPROVE",
+      "confidence_tier": "HIGH_CONFIDENCE",
+      "is_ground_truth_fraud": 0,
+      "extracted_features": {
+        "amount": 68.5,
+        "hour_of_day": 0,
+        "day_of_week": 1,
+        "attempts": 1,
+        "is_international": 0,
+        "card_network": "discover",
+        "card_type": "credit",
+        "email_domain": "missing"
+      }
+    },
+    "MEDIUM": {
+      "eval_id": "EVAL-IEEE-00048",
+      "fraud_probability": 0.1691,
+      "calibrated_probability": 0.1691,
+      "uncertainty": 0.1405,
+      "risk_tier": "MEDIUM",
+      "recommended_action": "REVIEW",
+      "confidence_tier": "HIGH_CONFIDENCE",
+      "is_ground_truth_fraud": 0,
+      "extracted_features": {
+        "amount": 42.29,
+        "hour_of_day": 0,
+        "day_of_week": 1,
+        "attempts": 1,
+        "is_international": 1,
+        "card_network": "visa",
+        "card_type": "debit",
+        "email_domain": "outlook.com"
+      }
+    },
+    "HIGH": {
+      "eval_id": "EVAL-IEEE-07876",
+      "fraud_probability": 0.7562,
+      "calibrated_probability": 0.7562,
+      "uncertainty": 0.1843,
+      "risk_tier": "HIGH",
+      "recommended_action": "BLOCK",
+      "confidence_tier": "HIGH_CONFIDENCE",
+      "is_ground_truth_fraud": 1,
+      "extracted_features": {
+        "amount": 41.33,
+        "hour_of_day": 20,
+        "day_of_week": 2,
+        "attempts": 23,
+        "is_international": 1,
+        "card_network": "mastercard",
+        "card_type": "credit",
+        "email_domain": "missing"
+      }
+    },
+    "CRITICAL": {
+      "eval_id": "EVAL-IEEE-01069",
+      "fraud_probability": 1.0,
+      "calibrated_probability": 1.0,
+      "uncertainty": 0.0,
+      "risk_tier": "CRITICAL",
+      "recommended_action": "BLOCK",
+      "confidence_tier": "HIGH_CONFIDENCE",
+      "is_ground_truth_fraud": 1,
+      "extracted_features": {
+        "amount": 90.87,
+        "hour_of_day": 8,
+        "day_of_week": 1,
+        "attempts": 40,
+        "is_international": 1,
+        "card_network": "visa",
+        "card_type": "credit",
+        "email_domain": "gmail.com"
+      }
+    }
+  }
+}

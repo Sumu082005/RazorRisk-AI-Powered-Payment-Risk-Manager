@@ -1,0 +1,43 @@
+# Environment & Secrets
+.env
+*.env
+!.env.example
+
+# Python & Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local databases & logs
+*.db
+*.sqlite
+*.sqlite3
+*.log
+storage/*.db
+
+# Large Datasets & Raw archives (downloaded separately)
+creditcard.csv
+*.csv.zip
+*.tar.gz
+*.zip
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Temporary & Scratch
+scratch/
+tmp/
+.tempmediaStorage/
