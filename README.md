@@ -378,4 +378,4 @@ RazorRisk is integrated with **Razorpay Test Mode**:
 - **Author**: **Sumukha P Kashyap**
 - **Event**: **Razorpay AI Buildathon 2026**
 - **Track**: **Track 02 — AI Risk Manager**
-- **Repository**: [https://github.com/Sumu082005/razorrisk1](https://github.com/Sumu082005/razorrisk1)
+- **Repository**: [https://github.com/Sumu082005/RazorRisk-AI-Powered-Payment-Risk-Manager](https://github.com/Sumu082005/RazorRisk-AI-Powered-Payment-Risk-Manager)
